@@ -2,15 +2,14 @@
 
 Aplikasi *mobile* untuk manajemen inventaris buku (CRUD) yang dibangun menggunakan **Flutter** sebagai Frontend dan **CodeIgniter 4** sebagai Backend API.
 
-## 1. Biodata Mahasiswa
-| :--- | :--- |
-| **Nama** | Sarah Shiba Huwaidah |
-| **NIM** | H1D023044 |
-| **Shift Baru** | C |
-| **Shift KRS** | A |
+## 1. Identitas
+Nama : Sarah Shiba Huwaidah<br>
+NIM : H1D023044<br>
+Shift Baru : C<br>
+Shift KRS :  A
 
 ## 2. Video Demo Aplikasi
-link video:
+https://github.com/user-attachments/assets/86af0525-5aeb-4555-8af9-eb5dfe987c68
 
 ## 3. Spesifikasi API
 Aplikasi ini terhubung dengan Backend CodeIgniter 4. Berikut adalah dokumentasi endpoint yang digunakan:
