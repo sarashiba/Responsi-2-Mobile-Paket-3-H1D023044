@@ -9,7 +9,8 @@ Shift Baru : C<br>
 Shift KRS :  A
 
 ## 2. Video Demo Aplikasi
-https://github.com/user-attachments/assets/86af0525-5aeb-4555-8af9-eb5dfe987c68
+https://github.com/user-attachments/assets/6da2f29a-a899-4930-ad08-c1e8532e968f
+
 
 ## 3. Spesifikasi API
 Aplikasi ini terhubung dengan Backend CodeIgniter 4. Berikut adalah dokumentasi endpoint yang digunakan:
