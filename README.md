@@ -1,4 +1,4 @@
-# Responsi 2 Mobile Programming - Paket 3
+# Responsi 2 Mobile Paket 3 H1D023044
 
 Aplikasi *mobile* untuk manajemen inventaris buku (CRUD) yang dibangun menggunakan **Flutter** sebagai Frontend dan **CodeIgniter 4** sebagai Backend API.
 
@@ -14,7 +14,7 @@ https://github.com/user-attachments/assets/86af0525-5aeb-4555-8af9-eb5dfe987c68
 ## 3. Spesifikasi API
 Aplikasi ini terhubung dengan Backend CodeIgniter 4. Berikut adalah dokumentasi endpoint yang digunakan:
 
-**Base URL:** `http://192.168.105.3:8080`
+**Base URL:** `http://192.168.105.3:8080` (IP laptop)
 
 ### A. Autentikasi
 | Fitur | Method | Endpoint | Format Body (JSON) |
@@ -32,7 +32,7 @@ Aplikasi ini terhubung dengan Backend CodeIgniter 4. Berikut adalah dokumentasi 
 | **Hapus Buku** | `DELETE` | `/buku/{id}` | Menghapus buku berdasarkan ID |
 
 **Detail Body Request (Buku):**
-Dikirim dalam format **JSON** atau **x-www-form-urlencoded**: ```json
+: ```
 {
     "judul": "String",
     "harga": "Integer",
