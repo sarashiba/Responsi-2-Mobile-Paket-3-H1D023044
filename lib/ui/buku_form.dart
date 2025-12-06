@@ -16,7 +16,7 @@ class _BukuFormState extends State<BukuForm> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String judul = "Tambah Buku Sarah";
-  String tombolSubmit = "Simpan";
+  String tombolSubmit = "SIMPAN";
 
   final _judulTextboxController = TextEditingController();
   final _hargaTextboxController = TextEditingController();
@@ -35,8 +35,8 @@ class _BukuFormState extends State<BukuForm> {
   isUpdate() {
     if (widget.buku != null) {
       setState(() {
-        judul = "UBAH BUKU";
-        tombolSubmit = "UBAH";
+        judul = "Ubah Buku Sarah";
+        tombolSubmit = "UPDATE";
         _judulTextboxController.text = widget.buku!.judul!;
         _hargaTextboxController.text = widget.buku!.harga.toString();
         _jumlahTextboxController.text = widget.buku!.jumlah.toString();
@@ -48,71 +48,252 @@ class _BukuFormState extends State<BukuForm> {
     }
   }
 
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.brown,
+              onPrimary: Colors.white,
+              onSurface: Colors.brown,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.brown,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      setState(() {
+        _tanggalTextboxController.text = picked.toString().split(' ')[0];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFEFEBE9),
       appBar: AppBar(
         title: Text(judul),
         backgroundColor: Colors.brown,
         foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                _buildTextField("Judul Buku", _judulTextboxController),
-                _buildTextField("Harga", _hargaTextboxController, isNumber: true),
-                _buildTextField("Jumlah", _jumlahTextboxController, isNumber: true),
-                _buildTextField("Tanggal Masuk", _tanggalTextboxController),
-                _buildTextField("Volume", _volumeTextboxController, isNumber: true),
-                _buildTextField("Penulis", _penulisTextboxController),
-                _buildTextField("Penerbit", _penerbitTextboxController),
-                const SizedBox(height: 20),
-                _buttonSubmit()
-              ],
+        child: Column(
+          children: [
+            _buildHeader(),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildCustomTextField(
+                            controller: _judulTextboxController,
+                            label: "Judul Buku",
+                            icon: Icons.book),
+                        _buildCustomTextField(
+                            controller: _penulisTextboxController,
+                            label: "Penulis",
+                            icon: Icons.person),
+                        _buildCustomTextField(
+                            controller: _penerbitTextboxController,
+                            label: "Penerbit",
+                            icon: Icons.business),
+                        const Divider(height: 30, color: Colors.brown),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildCustomTextField(
+                                  controller: _hargaTextboxController,
+                                  label: "Harga",
+                                  icon: Icons.attach_money,
+                                  isNumber: true),
+                            ),
+                            const SizedBox(width: 15),
+                            Expanded(
+                              child: _buildCustomTextField(
+                                  controller: _jumlahTextboxController,
+                                  label: "Stok",
+                                  icon: Icons.inventory_2,
+                                  isNumber: true),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildCustomTextField(
+                                  controller: _volumeTextboxController,
+                                  label: "Volume",
+                                  icon: Icons.layers,
+                                  isNumber: true),
+                            ),
+                            const SizedBox(width: 15),
+                            // GANTI TEXT FIELD BIASA DENGAN DATE FIELD
+                            Expanded(
+                              child: _buildDateField(), 
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        _buttonSubmit(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, {bool isNumber = false}) {
-    return TextFormField(
-      decoration: InputDecoration(labelText: label),
-      keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-      controller: controller,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "$label harus diisi";
-        }
-        return null;
-      },
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      height: 100,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.brown, Color(0xFF8D6E63)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          widget.buku != null ? Icons.edit_note : Icons.library_add,
+          size: 50,
+          color: Colors.white.withOpacity(0.8),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: TextFormField(
+        controller: _tanggalTextboxController,
+        readOnly: true,
+        onTap: () => _pickDate(context),
+        decoration: InputDecoration(
+          labelText: "Tanggal Masuk",
+          prefixIcon: const Icon(Icons.calendar_today, color: Colors.brown),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: Colors.brown.shade200),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.brown, width: 2),
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade50,
+          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Wajib diisi";
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _buildCustomTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool isNumber = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: Colors.brown),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: Colors.brown.shade200),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.brown, width: 2),
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade50,
+          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "$label harus diisi";
+          }
+          return null;
+        },
+      ),
     );
   }
 
   Widget _buttonSubmit() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.brown,
-        foregroundColor: Colors.white,
-      ),
-      child: Text(tombolSubmit),
-      onPressed: () {
-        var validate = _formKey.currentState!.validate();
-        if (validate) {
-          if (!_isLoading) {
-            if (widget.buku != null) {
-              ubah();
-            } else {
-              simpan();
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.brown,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          elevation: 5,
+        ),
+        child: _isLoading
+            ? const CircularProgressIndicator(color: Colors.white)
+            : Text(tombolSubmit,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        onPressed: () {
+          var validate = _formKey.currentState!.validate();
+          if (validate) {
+            if (!_isLoading) {
+              if (widget.buku != null) {
+                ubah();
+              } else {
+                simpan();
+              }
             }
           }
-        }
-      },
+        },
+      ),
     );
   }
 
